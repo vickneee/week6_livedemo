@@ -1,8 +1,7 @@
 pipeline {
     agent any
     environment {
-        // On Mac, docker should already be available in PATH
-
+        PATH = "/usr/local/bin:${env.PATH}"
         // Define Docker Hub credentials ID
         DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
         // Define Docker Hub repository name
