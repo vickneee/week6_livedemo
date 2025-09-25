@@ -50,6 +50,9 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh '''
+                    docker buildx create --use
+                    docker buildx inspect --bootstrap
+
                     docker buildx build \
                       --platform linux/amd64,linux/arm64 \
                       -t vickneee/week6_livedemo:latest \
