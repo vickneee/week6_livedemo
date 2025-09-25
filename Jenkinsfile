@@ -49,18 +49,24 @@ pipeline {
 
         stage('Build Docker Image') {
                             steps {
-                                sh """docker build -t ${DOCKERHUB_REPO}:{DOCKER_IMAGE_TAG} ."""
+                                sh 'docker build -t ${DOCKERHUB_REPO}:{DOCKER_IMAGE_TAG} .'
                             }
                         }
 
         stage('Push Docker Image to Docker Hub') {
             steps {
                 withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
-                    sh """
+                    sh '''
                         docker login -u {DOCKER_USER} -p {DOCKER_PASS}
                         docker push {DOCKERHUB_REPO}:{DOCKER_IMAGE_TAG}
-                    """
+                    '''
                 }
+            }
+        }
+
+        stage('Debug Vars') {
+            steps {
+                sh 'echo "Repo=$DOCKERHUB_REPO, Tag=$DOCKER_IMAGE_TAG"'
             }
         }
 
