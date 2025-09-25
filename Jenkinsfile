@@ -55,7 +55,8 @@ pipeline {
 
                     docker buildx build \
                       --platform linux/amd64,linux/arm64 \
-                      -t vickneee/week6_livedemo:latest \
+                      --pull \
+                      -t $DOCKERHUB_REPO:$DOCKER_IMAGE_TAG \
                       --push .
                 '''
             }
