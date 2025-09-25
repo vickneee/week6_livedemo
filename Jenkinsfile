@@ -50,16 +50,8 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh '''
-                    docker buildx create --use || true
-                    docker buildx inspect --bootstrap
+                sh 'docker build -t $DOCKERHUB_REPO:$DOCKER_IMAGE_TAG.'
 
-                    docker buildx build \\
-                    --platform linux/amd64 \\
-                    --pull \\
-                    -t $DOCKERHUB_REPO:$DOCKER_IMAGE_TAG \\
-                    .
-                '''
             }
         }
 
