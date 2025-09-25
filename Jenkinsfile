@@ -53,11 +53,12 @@ pipeline {
                     docker buildx create --use || true
                     docker buildx build \
                         --platform linux/amd64,linux/arm64 \
+                        --pull \
                         -t $DOCKERHUB_REPO:$DOCKER_IMAGE_TAG \
                         --push .
-                    '''
-                }
+                '''
             }
+        }
 
         stage('Push Docker Image to Docker Hub') {
             steps {
