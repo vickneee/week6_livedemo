@@ -1,5 +1,15 @@
 pipeline {
     agent any
+    environment {
+        // On Mac, docker should already be available in PATH
+
+        // Define Docker Hub credentials ID
+        DOCKERHUB_CREDENTIALS_ID = 'Docker_Hub'
+        // Define Docker Hub repository name
+        DOCKERHUB_REPO = 'vickneee/week6_livedemo'
+        // Define Docker image tag
+        DOCKER_IMAGE_TAG = 'latest'
+    }
     tools {
         maven 'Maven3'
     }
@@ -36,6 +46,23 @@ pipeline {
               steps {
                     jacoco()
               }
+        }
+
+        stage('Build Docker Image') {
+                            steps {
+                                sh 'docker build -t %DOCKERHUB_REPO%:%DOCKER_IMAGE_TAG% .'
+                            }
+                        }
+
+        stage('Push Docker Image to Docker Hub') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CREDENTIALS_ID}", usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                    sh '''
+                        docker login -u %DOCKER_USER% -p %DOCKER_PASS%
+                        docker push %DOCKERHUB_REPO%:%DOCKER_IMAGE_TAG%
+                    '''
+                }
+            }
         }
 
 
