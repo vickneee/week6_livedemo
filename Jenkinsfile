@@ -64,12 +64,6 @@ pipeline {
             }
         }
 
-        stage('Debug Vars') {
-            steps {
-                sh 'echo "Repo=$DOCKERHUB_REPO, Tag=$DOCKER_IMAGE_TAG"'
-            }
-        }
-
     }
 
 }
